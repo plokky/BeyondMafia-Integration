@@ -19,6 +19,9 @@ import HostOneNight from "./Host/HostOneNight";
 import CreateOneNightSetup from "./CreateSetup/CreateOneNightSetup";
 import LearnOneNight from "./Learn/LearnOneNight";
 
+import HostCanvasGame from "./Host/HostCanvasGame";
+import LearnCanvasGame from "./Learn/LearnCanvasGame";
+
 import { SubNav } from "../../components/Nav";
 import { GameTypes } from "../../Constants";
 import { UserContext } from "../../Contexts";
@@ -94,6 +97,8 @@ export default function Play(props) {
                                         return <HostResistance />;
                                     case "One Night":
                                         return <HostOneNight />;
+                                    case "Games":
+                                        return <HostCanvasGame />;
                                     default:
                                         setGameType(defaultGameType);
                                         return <></>;
@@ -136,6 +141,8 @@ export default function Play(props) {
                                         return <LearnResistance />;
                                     case "One Night":
                                         return <LearnOneNight />;
+                                    case "Games":
+                                        return <LearnCanvasGame />;
                                     default:
                                         setGameType(defaultGameType);
                                         return <></>;

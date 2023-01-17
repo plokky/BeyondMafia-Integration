@@ -703,6 +703,15 @@
 	margin-bottom: 10px;
 }
 
+.game .game-canvas {
+	flex-grow: 1;
+	display: flex;
+
+	padding-top: 10px;
+
+	background-color: var(--theme-color);
+}
+
 
 /* Scrollbar */
 

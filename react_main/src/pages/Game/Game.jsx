@@ -11,6 +11,7 @@ import MafiaGame from "./MafiaGame";
 import SplitDecisionGame from "./SplitDecisionGame";
 import ResistanceGame from "./ResistanceGame";
 import OneNightGame from "./OneNightGame";
+import CanvasGame from "./CanvasGame";
 import { GameContext, PopoverContext, SiteInfoContext, UserContext } from "../../Contexts";
 import Dropdown, { useDropdown } from "../../components/Dropdown";
 import Setup from "../../components/Setup";
@@ -635,6 +636,9 @@ function GameWrapper(props) {
 					}
 					{gameType == "One Night" &&
 						<OneNightGame />
+					}
+					{gameType == "Canvas Game" &&
+						<CanvasGame />
 					}
 				</div>
 			</GameContext.Provider>

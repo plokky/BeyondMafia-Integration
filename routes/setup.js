@@ -33,6 +33,8 @@ function markFavSetups(userId, setups) {
 	});
 }
 
+const setupSearchSelect = "id gameType name roles closed count featured minPlayers maxPlayers -_id"
+
 router.get("/id", async function (req, res) {
 	res.setHeader("Content-Type", "application/json");
 	try {
@@ -69,7 +71,7 @@ router.get("/featured", async function (req, res) {
 			var setups = await models.Setup.find({ featured: true, gameType })
 				.skip(start)
 				.limit(pageSize)
-				.select("id gameType name roles closed count featured -_id");
+				.select(setupSearchSelect);
 			var count = await models.Setup.countDocuments({ featured: true, gameType });
 
 			await markFavSetups(userId, setups);
@@ -104,7 +106,7 @@ router.get("/popular", async function (req, res) {
 				.sort("played")
 				.skip(start)
 				.limit(pageSize)
-				.select("id gameType name roles closed count featured -_id");
+				.select(setupSearchSelect);
 			var count = await models.Setup.countDocuments({ gameType });
 
 			await markFavSetups(userId, setups);
@@ -139,7 +141,7 @@ router.get("/favorites", async function (req, res) {
 				.select("favSetups")
 				.populate({
 					path: "favSetups",
-					select: "id gameType name roles closed count featured -_id",
+					select: setupSearchSelect,
 					options: { limit: setupLimit }
 				});
 
@@ -183,7 +185,7 @@ router.get("/yours", async function (req, res) {
 				.select("setups")
 				.populate({
 					path: "setups",
-					select: "id gameType name roles closed count featured -_id",
+					select: setupSearchSelect,
 					options: { limit: setupLimit }
 				});
 
@@ -226,7 +228,7 @@ router.get("/search", async function (req, res) {
 			var setups = await models.Setup.find({ name: { $regex: String(req.query.query), $options: "i" }, gameType })
 				.sort("played")
 				.limit(setupLimit)
-				.select("id gameType name roles closed count featured -_id");
+				.select(setupSearchSelect);
 			var count = setups.length;
 			setups = setups.slice(start, start + pageSize);
 
@@ -379,7 +381,7 @@ router.post("/create", async function (req, res) {
 		setup.dawn = Boolean(setup.dawn);
 		setup.mustAct = Boolean(setup.mustAct);
 
-		if (!routeUtils.validProp(setup.gameType) || constants.gameTypes.indexOf(setup.gameType) == -1) {
+		if (!routeUtils.validProp(setup.gameType) || constants.gameTypes.indexOf(setup.gameType) == -1 || setup.gameType === "Games") {
 			res.status(500);
 			res.send("Invalid game type.");
 			return;

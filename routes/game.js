@@ -144,9 +144,9 @@ router.get("/:id/connect", async function (req, res) {
         var port = game.port;
         var token = userId && await redis.createAuthToken(userId);
 
-        if (type && !isNaN(port))
+        if (type && !isNaN(port)) {
             res.send({ port, type, token });
-        else {
+        } else {
             res.status(500);
             res.send("Error loading game.");
         }
@@ -377,7 +377,9 @@ router.post("/host", async function (req, res) {
         }
 
         setup = setup.toJSON();
-        setup.roles = JSON.parse(setup.roles);
+        if ( setup.roles ) {
+            setup.roles = JSON.parse(setup.roles);
+        }
 
         if (await redis.getSetCreatingGame(userId)) {
             res.status(500);
@@ -605,6 +607,11 @@ const settingsChecks = {
     },
     "One Night": (settings, setup) => {
         return {};
+    },
+    "Canvas Game": (settings, setup) => {
+        return {
+            "gamePlayerCount": settings.playerCount,
+        };
     },
 };
 

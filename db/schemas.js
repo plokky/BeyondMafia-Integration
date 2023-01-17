@@ -113,7 +113,9 @@ var schemas = {
         featured: { type: Boolean, index: true },
         played: { type: Number, index: true },
         rolePlays: { type: Map, of: Number },
-        roleWins: { type: Map, of: Number }
+        roleWins: { type: Map, of: Number },
+        minPlayers: Number, // For Canvas Games
+        maxPlayers: Number, // For Canvas Games
     }),
     "Game": new mongoose.Schema({
         id: { type: String, index: true },

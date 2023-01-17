@@ -1,5 +1,7 @@
 const express = require("express");
 const shortid = require("shortid");
+const fs = require("fs");
+const path = require("path");
 const constants = require("../data/constants");
 const models = require("../db/models");
 const routeUtils = require("./utils");
@@ -7,6 +9,8 @@ const redis = require("../modules/redis");
 const gameLoadBalancer = require("../modules/gameLoadBalancer");
 const logger = require("../modules/logging")(".");
 const router = express.Router();
+
+const canvasGamePath = path.join( __dirname, "./../Games/types/Canvas Games/Games/" );
 
 router.get("/groups", async function (req, res) {
 	res.setHeader("Content-Type", "application/json");
@@ -328,6 +332,7 @@ router.post("/addToGroup", async function (req, res) {
 		await inGroup.save();
 		await redis.cacheUserInfo(userIdToAdd, true);
 		await redis.cacheUserPermissions(userIdToAdd);
+
 
 		routeUtils.createModAction(userId, "Add User to Group", [userIdToAdd, groupName]);
 		res.sendStatus(200);
@@ -1359,6 +1364,65 @@ router.post("/announcement", async function (req, res) {
 		logger.error(e);
 		res.status(500);
 		res.send("Error loading announcements.");
+	}
+});
+
+router.post("/updateCanvasGames", async function (req, res) {
+	res.setHeader("Content-Type", "application/json");
+
+	try {
+		var userId = await routeUtils.verifyLoggedIn(req);
+		var perm = "manageCanvasGames";
+
+		if (!(await routeUtils.verifyPermission(res, userId, perm)))
+			return;
+
+		const gameSetupInfos = fs.readdirSync( canvasGamePath ).map( ( curDir ) => {
+			try {
+				const Game = require( canvasGamePath + curDir + "/Game.js" );
+				const game = new Game( { "settings": { "setup": {}, "stateLengths": [] } } ); // bare settings to not crash
+
+				return game.getSetupInfo();
+			} catch (e) {
+				return undefined;
+			}
+		} ).filter( ( curInstance ) => {
+			return curInstance;
+		} );
+
+		const setups = await models.Setup.find({ "gameType": "Canvas Game" })
+			.limit(0)
+			.select("_id name");
+
+		const toCreate = gameSetupInfos.filter( ( curGameInfo ) => {
+			return !setups.find( ( curSetup ) => { return curSetup.name === curGameInfo.name; } );
+		} ).map( ( curSetup ) => {
+			curSetup.id = shortid.generate();
+			curSetup.creator = req.session.user._id;
+
+			return curSetup;
+		} );
+
+		const toDelete = setups.filter( ( curSetup ) => {
+			return !gameSetupInfos.find( ( curGameInfo ) => { return curSetup.name === curSetupInfo.name; } );
+		} ).map( ( deleteObjs ) => {
+			return deleteObjs._id;
+		} );
+
+		await models.Setup.deleteMany({ "id": { $in: toDelete } }).exec();
+
+		toCreate.forEach( async ( setupInfo ) => {
+			const makeSetup = new models.Setup( setupInfo );
+
+			await makeSetup.save();
+		} );
+
+		res.sendStatus(200);
+	}
+	catch (e) {
+		logger.error(e);
+		res.status(500);
+		res.send("Error creating game.");
 	}
 });
 

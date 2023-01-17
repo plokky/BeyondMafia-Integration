@@ -34,8 +34,7 @@ export default function Setup(props) {
 					key={alignment} />
 			);
 		}
-	}
-	else {
+	} else if ( props.setup.closed === false ) {
 		let roleNames = Object.keys(props.setup.roles[0]);
 		multi = props.setup.roles.length > 1;
 
@@ -52,6 +51,8 @@ export default function Setup(props) {
 			roleCounts = roleCounts.slice(0, maxRolesCount);
 			overSize = true;
 		}
+	} else {
+		roleCounts = [];
 	}
 
 	function onClick() {
