@@ -703,13 +703,20 @@
 	margin-bottom: 10px;
 }
 
+.game .game-canvas-backdrop {
+	flex-grow: 1;
+	display: flex;
+
+	background-color: var(--theme-color);
+}
+
 .game .game-canvas {
 	flex-grow: 1;
 	display: flex;
 
-	padding-top: 10px;
+	margin: 5px;
 
-	background-color: var(--theme-color);
+	background-color: white;
 }
 
 

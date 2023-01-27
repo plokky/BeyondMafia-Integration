@@ -26,6 +26,10 @@ export default function CanvasGame() {
 	const audioOverrides = [false];
 	const audioVolumes = [0];
 
+	const canvasRef = useRef();
+
+	let gameLogic;
+
 	// Make player view current state when it changes
 	useEffect(() => {
 		updateStateViewing({ type: "current" });
@@ -39,6 +43,26 @@ export default function CanvasGame() {
 			updateStateViewing({ type: "first" });
 	}, []);
 
+	const canvasWrapper = (
+		<>
+			<div className="game-canvas-backdrop">
+				<canvas className="game-canvas" ref={canvasRef}></canvas>
+			</div>
+		</>
+	)
+
+	useEffect(() => {
+		import( "./Games/" + game.setup.name.split( " " ).join( "" ) + ".jsx" )
+			.then( (GameLogic) => {
+				gameLogic = new GameLogic.GameLogic( canvasRef );
+
+				gameLogic.initDraw()
+			} )
+			.catch( ( e ) => {
+				console.log( e );
+			} );
+	}, []);
+
 	useSocketListeners(socket => {
 		socket.on("state", state => {
 			if (playBellRef.current)
@@ -48,7 +72,7 @@ export default function CanvasGame() {
 		});
 	}, game.socket);
 
-	const canvas = <canvas className="game-canvas"></canvas>;
+	// useEffect()
 
 	return (
 		<>
@@ -94,9 +118,7 @@ export default function CanvasGame() {
 							stateViewing={stateViewing} />
 					</>
 				}
-				centerPanelContent={
-
-				}
+				centerPanelContent={canvasWrapper}
 				rightPanelContent={
 					<>
 						<TextMeetingLayout
@@ -121,4 +143,6 @@ export default function CanvasGame() {
 				} />
 		</>
 	);
+
+
 }
