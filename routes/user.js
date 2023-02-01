@@ -48,7 +48,7 @@ router.get("/info", async function (req, res) {
 router.get("/searchName", async function (req, res) {
     res.setHeader("Content-Type", "application/json");
     try {
-        var query = String(req.query.query);
+        var query = routeUtils.strParseAlphaNum(req.query.query);
         var users = await models.User.find({ name: new RegExp(query, "i"), deleted: false })
             .select("id name avatar -_id")
             .limit(constants.mainUserSearchAmt)
@@ -389,7 +389,18 @@ router.post("/settings/update", async function (req, res) {
         if (prop == "backgroundColor" || prop == "textColor" || prop == "nameColor") {
             var c = new color(value);
 
-            if ((prop == "textColor" || prop == "nameColor") && c.isLight()) {
+            // replaced c.isLight() with a manual check
+            // original function https://github.com/Qix-/color/blob/master/index.js#L298
+            // YIQ equation from http://24ways.org/2010/calculating-color-contrast
+
+            // original value was 0.5
+            const contrastTolerance = 0.6;
+
+            const rgb = c.rgb().color;
+            const yiq = (rgb[0] * 2126 + rgb[1] * 7152 + rgb[2] * 722) / 10000;
+            const isLight = yiq >= contrastTolerance * 256;
+
+            if ((prop == "textColor" || prop == "nameColor") && isLight) {
                 res.status(500);
                 res.send("Color is too light.");
                 return;
@@ -519,7 +530,6 @@ router.post("/name", async function (req, res) {
         var itemsOwned = await redis.getUserItemsOwned(userId);
         var name = String(req.body.name);
         var code = String(req.body.code);
-        var regex = /^(?!.*[-_]{2})[\w-]*$/;
         var perm = "changeName";
 
         if (!(await routeUtils.verifyPermission(res, userId, perm)))
@@ -549,7 +559,7 @@ router.post("/name", async function (req, res) {
             return;
         }
 
-        if (!name.match(regex)) {
+        if (!name.match(routeUtils.usernameRegex)) {
             res.status(500);
             res.send("Names can only contain letters, numbers, and nonconsecutive undescores/hyphens.");
             return;
@@ -567,6 +577,15 @@ router.post("/name", async function (req, res) {
             .select("_id");
 
         if (existingUser) {
+            res.status(500);
+            res.send("There is already a user with this name.");
+            return;
+        }
+
+        var blockedName = await models.BlockedName.findOne({ name: new RegExp(`^${name}$`, "i") })
+            .select("_id");
+
+        if (blockedName) {
             res.status(500);
             res.send("There is already a user with this name.");
             return;

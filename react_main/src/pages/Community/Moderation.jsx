@@ -1098,13 +1098,19 @@ function useModCommands(argValues, commandRan) {
 					.catch(errorAlert);
 			}
 		},
-		"Update Games List": {
-			perm: "manageCanvasGames",
-			args: [ ],
+		"Block Name": {
+			perm: "blockName",
+			args: [
+				{
+					label: "Name",
+					name: "name",
+					type: "text"
+				},
+			],
 			run: function () {
-				axios.post("/mod/updateCanvasGames")
+				axios.post("/mod/blockName", argValues)
 					.then(() => {
-						siteInfo.showAlert("Games List Updated.", "success");
+						siteInfo.showAlert("Name blocked.", "success");
 						commandRan();
 					})
 					.catch(errorAlert);

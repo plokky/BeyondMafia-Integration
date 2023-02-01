@@ -275,6 +275,54 @@
     background-position: -120px -120px;
 }
 
+.role-Mafia-Nurse {
+    background-position: -150px -120px;
+}
+
+.role-Mafia-Caroler {
+    background-position: -180px -120px;
+}
+
+.role-Mafia-Dreamer {
+    background-position: -210px -120px;
+}
+
+.role-Mafia-Matchmaker {
+    background-position: -240px -120px;
+}
+
+.role-Mafia-Judge {
+    background-position: -270px -120px;
+}
+
+.role-Mafia-Snoop {
+    background-position: -300px -120px;
+}
+
+.role-Mafia-Party-Host {
+    background-position: -930px -0px;
+}
+
+.role-Mafia-Cutler {
+    background-position: -960px -0px;
+}
+
+.role-Mafia-Snowman {
+    background-position: -990px -0px;
+}
+
+.role-Mafia-Virgin {
+    background-position: -930px -40px;
+}
+
+.role-Mafia-Mimic {
+    background-position: -960px -40px;
+}
+
+.role-Mafia-Resurrectionist {
+    background-position: -990px -40px;
+}
+
 /* 
 * Mafia 
 */
@@ -311,6 +359,10 @@
     background-position: -570px 0;
 }
 
+.role-Mafia-Killer-Bee {
+    background-position: -600px 0;
+}
+
 .role-Mafia-Driver {
     background-position: -330px -40px;
 }
@@ -337,6 +389,50 @@
 
 .role-Mafia-Lookout {
     background-position: -510px 0px;
+}
+
+.role-Mafia-Gramps {
+    background-position: -540px 0px;
+}
+
+.role-Mafia-Associate {
+    background-position: -480px -40px;
+}
+
+.role-Mafia-Scout {
+    background-position: -510px -40px;
+}
+
+.role-Mafia-Arsonist {
+    background-position: -540px -40px;
+}
+
+.role-Mafia-Heartbreaker {
+    background-position: -570px -40px;
+}
+
+.role-Mafia-Prosecutor {
+    background-position: -600px -40px;
+}
+
+.role-Mafia-Tailor {
+    background-position: -330px -80px;
+}
+
+.role-Mafia-Actress {
+    background-position: -360px -80px;
+}
+
+.role-Mafia-Fabricator {
+    background-position: -390px -80px;
+}
+
+.role-Mafia-Yakuza {
+    background-position: -420px -80px;
+}
+
+.role-Mafia-Necromancer {
+    background-position: -450px -80px;
 }
 
 /* 
@@ -369,6 +465,18 @@
 
 .role-Mafia-Executioner {
     background-position: -660px -40px;
+}
+
+.role-Mafia-Old-Maid {
+    background-position: -690px -40px;
+}
+
+.role-Mafia-Lover {
+    background-position: -720px -40px;
+}
+
+.role-Mafia-Traitor {
+    background-position: -750px -40px;
 }
 
 /* 

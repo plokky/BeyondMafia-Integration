@@ -88,6 +88,7 @@ export function SmallRoleList(props) {
 				small
 				role={role}
 				key={role}
+				showSecondaryHover
 				gameType={props.gameType} />
 		));
 	else
@@ -97,6 +98,7 @@ export function SmallRoleList(props) {
 				count={props.roles[role]}
 				small={true}
 				gameType={props.gameType}
+				showSecondaryHover
 				key={role} />
 		));
 
