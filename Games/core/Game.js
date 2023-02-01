@@ -92,6 +92,7 @@ module.exports = class Game {
         this.scheduled = options.settings.scheduled;
         this.timeouts = [];
         this.isTest = options.isTest;
+        this.gamePlayerCount = options.settings.gamePlayerCount;
     }
 
     async init() {
@@ -274,7 +275,7 @@ module.exports = class Game {
             if (
                 !player &&
                 this.currentState == -1 &&
-                this.players.length < this.setup.total &&
+                this.players.length < ( this.setup.total || this.gamePlayerCount ) &&
                 !this.banned[user.id]
             ) {
                 await redis.joinGame(user.id, this.id);

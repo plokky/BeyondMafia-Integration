@@ -1116,6 +1116,18 @@ function useModCommands(argValues, commandRan) {
 					.catch(errorAlert);
 			}
 		},
+		"Update Games List": {
+			perm: "manageCanvasGames",
+			args: [ ],
+			run: function () {
+				axios.post("/mod/updateCanvasGames")
+					.then(() => {
+						siteInfo.showAlert("Games List Updated.", "success");
+						commandRan();
+					})
+					.catch(errorAlert);
+			}
+		},
 		"Delete Forum Board": {
 			hidden: true,
 			args: [

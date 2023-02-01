@@ -637,6 +637,9 @@ function GameWrapper(props) {
                     {gameType == "One Night" &&
                         <OneNightGame />
                     }
+                    {gameType == "Canvas Game" &&
+                        <CanvasGame />
+                    }
                 </div>
             </GameContext.Provider>
         );

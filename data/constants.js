@@ -1,6 +1,6 @@
 module.exports = {
     restart: null,
-    gameTypes: ["Mafia", "Split Decision", "Resistance", "One Night"],
+    gameTypes: ["Mafia", "Split Decision", "Resistance", "One Night", "Canvas Game"],
     lobbies: ["Main", "Sandbox", "Competitive", "Games"],
     alignments: {
         "Mafia": ["Village", "Mafia", "Monsters", "Independent"],
@@ -67,6 +67,13 @@ module.exports = {
                 max: 10 * 60 * 1000,
                 default: 2 * 60 * 1000
             }
+        },
+        "Canvas Game": {
+            "Turn": {
+                min: 1 * 60 * 1000,
+                max: 30 * 60 * 1000,
+                default: 10 * 60 * 1000
+            },
         },
     },
     noQuotes: {},
@@ -246,6 +253,7 @@ module.exports = {
         "announce": true,
         "blockName": true,
         "approvePending": true,
+        "manageCanvasGames": true,
     },
     defaultGroups: {
         "Owner": {
@@ -277,6 +285,7 @@ module.exports = {
                 "scheduleRestart",
                 "disableAllCensors",
                 "kick",
+                "manageCanvasGames",
             ]
         },
         "Admin": {
@@ -329,6 +338,7 @@ module.exports = {
                 "viewFlagged",
                 "blockName",
                 "approvePending",
+                "manageCanvasGames",
             ]
         },
         "Head Mod": {
